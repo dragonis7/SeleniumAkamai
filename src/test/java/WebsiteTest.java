@@ -2,9 +2,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 
@@ -36,13 +39,25 @@ public class WebsiteTest {
 
         driver.get(url);
         WebElement searchForm = driver.findElement(By.name("keyword"));
-        WebElement searchLocation = driver.findElement(By.className("jLocPlaceholder"));
-        WebElement searchButton = driver.findElement(By.className("btn_text"));
+        WebElement searchFormDiv = driver.findElement(By.className("jLocPlaceholder"));
+        WebElement searchLocation = driver.findElement(By.xpath("//*[@id=\"location_facet_chzn\"]/ul/li/input"));
+        WebElement searchButton = driver.findElement(By.xpath("//*[@id=\"jSearchSubmit\"]/span[2]"));
 
         searchForm.clear();
         searchForm.sendKeys("test");
+        searchFormDiv.click();
         searchLocation.sendKeys("Krakow, Poland");
+        searchLocation.sendKeys(Keys.ENTER);
         searchButton.click();
+
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        WebElement element = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"jobs_filters_title\"]/div/span[1]")));
+        WebElement totalResult = driver.findElement(By.xpath("//*[@id=\"jobs_filters_title\"]/div/span[1]"));
+
+        System.out.println(totalResult.getText());
+
+
     }
 
     @After
