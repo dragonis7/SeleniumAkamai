@@ -1,67 +1,37 @@
-import org.junit.After;
+import com.zdybski.AdvertPage;
+import com.zdybski.AkamaiJobsPage;
+import com.zdybski.ResultPage;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.io.File;
-
-/**
- * Created by Dariusz Zdybski on 2017-12-06.
- */
-public class WebsiteTest {
-
-    private WebDriver driver;
-    private String searchPhrase;
-    private String jobLocation;
-    private String url;
-
-    @Before
-    public void setUp(){
+import org.junit.Assert;
 
 
-        final File file = new File("src/test/resources/chromedriver.exe");
-        System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
+public class WebsiteTest extends AbstractUITest {
 
-        driver = new ChromeDriver();
-        searchPhrase = "test”";
-         jobLocation = "Krakow office";
-         url = "https://akamaijobs.referrals.selectminds.com/";
-    }
+    private static final String SEARCH_PHRASE = "test";
+    private static final int EXPECTED_TOTAL_RESULT_AMOUNT = 11;
+    private static final String EXPECTED_ADV_DATE = "Oct 25, 2017";
+    private static final String JOB_LOCATION = "Krakow, Poland ";
+    private static final String START_URL =  "https://akamaijobs.referrals.selectminds.com/";;
+    private static final String JOB_PHRASE = "Software Development Engineer in Test";
+    private static final int EXPECTED_AMOUNT_OF_JOB_PHRASES = 2;
+    private static final String JOB_PHRASE_LUNA = "Software Development Engineer in Test - LUNA";;
 
     @Test
-    public void testSearch(){
+    public void testSearch() throws NoSuchFieldException {
 
-        driver.get(url);
-        WebElement searchForm = driver.findElement(By.name("keyword"));
-        WebElement searchFormDiv = driver.findElement(By.className("jLocPlaceholder"));
-        WebElement searchLocation = driver.findElement(By.xpath("//*[@id=\"location_facet_chzn\"]/ul/li/input"));
-        WebElement searchButton = driver.findElement(By.xpath("//*[@id=\"jSearchSubmit\"]/span[2]"));
+        AkamaiJobsPage jobsPage = new AkamaiJobsPage(driver, START_URL);
+        jobsPage.goToPage();
+        ResultPage resultPage = jobsPage.searchForJobs(SEARCH_PHRASE, JOB_LOCATION);
+        int actualTotalResultAmount = resultPage.getTotalResultAmount();
+        int actualJobOffersAMount = resultPage.findAmountOfSpecifiedJobOffers(JOB_PHRASE);
+        AdvertPage advertPage = resultPage.goToAdvertPage(JOB_PHRASE_LUNA);
+        String actualDateOfAdv = advertPage.getCreationDate();
 
-        searchForm.clear();
-        searchForm.sendKeys("test");
-        searchFormDiv.click();
-        searchLocation.sendKeys("Krakow, Poland");
-        searchLocation.sendKeys(Keys.ENTER);
-        searchButton.click();
-
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        WebElement element = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"jobs_filters_title\"]/div/span[1]")));
-        WebElement totalResult = driver.findElement(By.xpath("//*[@id=\"jobs_filters_title\"]/div/span[1]"));
-
-        System.out.println(totalResult.getText());
-
-
+        Assert.assertEquals(EXPECTED_TOTAL_RESULT_AMOUNT, actualTotalResultAmount);
+        Assert.assertEquals(EXPECTED_AMOUNT_OF_JOB_PHRASES, actualJobOffersAMount);
+        Assert.assertEquals(EXPECTED_ADV_DATE,actualDateOfAdv);
     }
 
-    @After
-    public void tearDown(){
-        driver.quit();
-    }
+
 }
