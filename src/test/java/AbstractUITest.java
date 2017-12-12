@@ -9,8 +9,8 @@ public abstract class AbstractUITest {
     WebDriver driver;
 
     AbstractUITest(){
-        final File file = new File("src/test/resources/chromedriver.exe");
-        System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
+        final File driverFile = new File("src/test/resources/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", driverFile.getAbsolutePath());
         driver = new ChromeDriver();
     }
 

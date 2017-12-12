@@ -29,13 +29,19 @@ public class ResultPage extends AbstractPage {
 
     public int findAmountOfSpecifiedJobOffers(String phrase) {
 
-        List<WebElement> specifiedJobOffers = jobOffers.stream().filter(jobOffer -> jobOffer.getText().contains(phrase)).collect(Collectors.toList());
+        List<WebElement> specifiedJobOffers = jobOffers.stream()
+                .filter(jobOffer -> jobOffer.getText()
+                        .contains(phrase))
+                .collect(Collectors.toList());
+
         return specifiedJobOffers.size();
 
     }
 
     public AdvertPage goToAdvertPage(String advert) {
-        Optional<WebElement> specifiedJobOffer = jobOffers.stream().filter(jobOffer -> jobOffer.getText().equals(advert)).findFirst();
+        Optional<WebElement> specifiedJobOffer = jobOffers.stream()
+                .filter(jobOffer -> jobOffer.getText()
+                        .equals(advert)).findFirst();
 
         try {
             if (specifiedJobOffer.isPresent()) {
