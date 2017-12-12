@@ -15,7 +15,7 @@ public class AdvertPage extends AbstractPage {
         waitForElementVisibility(advertCreationDate);
     }
 
-    public String getCreationDate(){
+    public String getCreationDate() {
         return advertCreationDate.getText();
     }
 }

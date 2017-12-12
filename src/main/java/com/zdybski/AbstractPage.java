@@ -17,7 +17,7 @@ public class AbstractPage {
         webDriverWait = new WebDriverWait(driver, 50);
     }
 
-    void waitForElementVisibility(WebElement element){
+    void waitForElementVisibility(WebElement element) {
         webDriverWait.until(ExpectedConditions.visibilityOf(element));
 
     }

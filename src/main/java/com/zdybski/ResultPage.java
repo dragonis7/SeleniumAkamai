@@ -18,28 +18,33 @@ public class ResultPage extends AbstractPage {
     @FindBy(className = "job_link")
     private List<WebElement> jobOffers;
 
-    public ResultPage(WebDriver driver){
+    public ResultPage(WebDriver driver) {
         super(driver);
         waitForElementVisibility(totalResultAmount);
     }
 
-    public int getTotalResultAmount(){
+    public int getTotalResultAmount() {
         return new Integer(totalResultAmount.getText());
     }
 
-    public int findAmountOfSpecifiedJobOffers(String phrase){
+    public int findAmountOfSpecifiedJobOffers(String phrase) {
 
         List<WebElement> specifiedJobOffers = jobOffers.stream().filter(jobOffer -> jobOffer.getText().contains(phrase)).collect(Collectors.toList());
         return specifiedJobOffers.size();
 
     }
 
-    public AdvertPage goToAdvertPage(String advert) throws NoSuchFieldException {
+    public AdvertPage goToAdvertPage(String advert) {
         Optional<WebElement> specifiedJobOffer = jobOffers.stream().filter(jobOffer -> jobOffer.getText().equals(advert)).findFirst();
-        if(specifiedJobOffer.isPresent() ){
-            specifiedJobOffer.get().click();
-        }else {
-            throw new NoSuchElementException("Page is missing advert: "+advert);
+
+        try {
+            if (specifiedJobOffer.isPresent()) {
+                specifiedJobOffer.get().click();
+            } else {
+                throw new NoSuchElementException("Page is missing advert: " + advert);
+            }
+        } catch (NoSuchElementException e) {
+            throw e;
         }
 
         return new AdvertPage(driver);
