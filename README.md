@@ -16,4 +16,6 @@ Technology stack:
 To run the project you need to have Java 8, maven and chrome browser, chrome webdriver (provided in repo) installed
 
 Running for windows:
+
+
     mvn clean test
