@@ -3,6 +3,7 @@ Author: Dariusz Zdybski (dariusz.zdybski@gmail.com)
 This project includes tests for searching job post in Akamai website.
 
 It checks three main things:
+
     -total amount of searched results
 
     -the number of jobs in the first result page that have "Software Development Engineer in Test" in their title
